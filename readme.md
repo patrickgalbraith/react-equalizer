@@ -12,7 +12,7 @@ Pure React component which equalizes heights of child components.
 </Equalizer>
 ```
 
-### Usage
+### Todo
 * Add support for rows
 * Add support for responsive breakpoints
 
