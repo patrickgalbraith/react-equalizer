@@ -34,7 +34,7 @@ export default class Equalizer extends Component {
 
         childEl.style.height = ''
 
-        let height = childEl.offsetHeight
+        let height = childEl.clientHeight
 
         if(height > maxHeight) {
           maxHeight = height
