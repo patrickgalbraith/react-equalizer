@@ -1,20 +1,10 @@
 {
   "name": "react-equalizer",
   "version": "1.0.0",
+  "author": "Patrick Galbraith",
   "description": "Pure React Match Height Component",
   "main": "index.js",
-  "devDependencies": {
-    "babel-cli": "^6.5.1",
-    "babel-core": "^6.5.1",
-    "babel-preset-es2015": "^6.5.0",
-    "babel-preset-react": "^6.5.0",
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "node ./node_modules/babel-cli/bin/babel.js src --out-dir lib"
-  },
+  "homepage": "https://github.com/patrickgalbraith/react-equalizer",
   "repository": {
     "type": "git",
     "url": "https://github.com/patrickgalbraith/react-equalizer.git"
@@ -25,10 +15,22 @@
     "equalheight",
     "matchheight"
   ],
-  "author": "Patrick Galbraith",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/patrickgalbraith/react-equalizer/issues"
   },
-  "homepage": "https://github.com/patrickgalbraith/react-equalizer"
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "node ./node_modules/babel-cli/bin/babel.js src --out-dir lib"
+  },
+  "dependencies": {
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.5.1",
+    "babel-core": "^6.5.1",
+    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-react": "^6.5.0"
+  }
 }
