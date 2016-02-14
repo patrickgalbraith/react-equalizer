@@ -12,9 +12,18 @@ Pure React component which equalizes heights of child components.
 </Equalizer>
 ```
 
-### Todo
-* Add support for rows
-* Add support for responsive breakpoints
+With advanced options:
+
+```
+<Equalizer
+  byRow={false}
+  property="maxHeight"
+  enabled={(node) => window.matchMedia("(min-width: 400px)").matches}>
+  <div>Child 1</div>
+  <div>Child 2</div>
+  <div>Child 3</div>
+</Equalizer>
+```
 
 ### References
 * Zurb Foundation Equalizer

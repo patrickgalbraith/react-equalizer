@@ -24,26 +24,54 @@ export default class Equalizer extends Component {
     window.setTimeout(this.updateChildrenHeights(), 0)
   }
 
-  updateChildrenHeights() {
-    const node = ReactDOM.findDOMNode(this)
-    let maxHeight = 0
+  getHeightsByRow(nodes, byRow = true) {
+    let lastElTopOffset = nodes[0].offsetTop,
+        groups          = []
+        row             = 0
 
-    if (node !== undefined) {
-      for (let i=0; i < node.children.length; i++) {
-        let childEl = node.children[i]
+    groups[row] = []
 
-        childEl.style.height = ''
+    for(let i = 0, i < nodes.length; i++){
+      nodes[i].style.height = 'auto'
 
-        let height = childEl.clientHeight
+      const elOffsetTop = nodes[i].offsetTop
+      const elHeight    = nodes[i].offsetHeight
 
-        if(height > maxHeight) {
-          maxHeight = height
-        }
+      if (elOffsetTop != lastElTopOffset && byRow) {
+        row++
+        groups[row] = []
+        lastElTopOffset = elOffsetTop
       }
 
-      for (let i=0; i < node.children.length; i++) {
-        let childEl = node.children[i]
-        childEl.style.height = maxHeight
+      groups[row].push(nodes[i], nodes[i].offsetHeight)
+    }
+
+    for (let j = 0; j < groups.length; j++) {
+      const heights = groups[j].map((item) => item[1])
+      const max     = Math.max.apply(null, heights)
+      groups[j].push(max)
+    }
+
+    return groups
+  }
+
+  updateChildrenHeights() {
+    const { property, byRow, enabled } = this.props
+    const node = ReactDOM.findDOMNode(this)
+
+    if (!enabled(node)) {
+      return
+    }
+
+    if (node !== undefined) {
+      const heights = getHeightsByRow(node.children, byRow)
+
+      for (let row = 0; row < heights.length; row++) {
+        const max = heights[row][heights[row].length-1]
+
+        for (let i = 0; i < (heights[row].length - 1); i++) {
+          heights[row][i][0].style[property] = max
+        }
       }
     }
   }
@@ -57,6 +85,15 @@ export default class Equalizer extends Component {
   }
 }
 
+Control.defaultProps = {
+  property: 'height',
+  byRow:    true,
+  enabled:  () => true
+}
+
 Equalizer.propTypes = {
-  children: React.PropTypes.node.isRequired
+  children: React.PropTypes.node.isRequired,
+  property: React.PropTypes.string,
+  byRow:    React.PropTypes.bool,
+  enabled:  React.PropTypes.func
 }
