@@ -4,7 +4,7 @@ Pure React component which equalizes heights of child components.
 
 ### Usage
 
-```
+```jsx
 <Equalizer>
   <div>Child 1</div>
   <div>Child 2</div>
@@ -14,7 +14,7 @@ Pure React component which equalizes heights of child components.
 
 With advanced options:
 
-```
+```jsx
 <Equalizer
   byRow={false}
   property="maxHeight"
