@@ -26,12 +26,12 @@ export default class Equalizer extends Component {
 
   getHeightsByRow(nodes, byRow = true) {
     let lastElTopOffset = nodes[0].offsetTop,
-        groups          = []
+        groups          = [],
         row             = 0
 
     groups[row] = []
 
-    for(let i = 0, i < nodes.length; i++){
+    for(let i = 0; i < nodes.length; i++){
       nodes[i].style.height = 'auto'
 
       const elOffsetTop = nodes[i].offsetTop
@@ -43,7 +43,7 @@ export default class Equalizer extends Component {
         lastElTopOffset = elOffsetTop
       }
 
-      groups[row].push(nodes[i], nodes[i].offsetHeight)
+      groups[row].push([nodes[i], nodes[i].offsetHeight])
     }
 
     for (let j = 0; j < groups.length; j++) {
@@ -63,8 +63,8 @@ export default class Equalizer extends Component {
       return
     }
 
-    if (node !== undefined) {
-      const heights = getHeightsByRow(node.children, byRow)
+    if (node !== undefined && node.children) {
+      const heights = this.getHeightsByRow(node.children, byRow)
 
       for (let row = 0; row < heights.length; row++) {
         const max = heights[row][heights[row].length-1]
@@ -85,7 +85,7 @@ export default class Equalizer extends Component {
   }
 }
 
-Control.defaultProps = {
+Equalizer.defaultProps = {
   property: 'height',
   byRow:    true,
   enabled:  () => true
