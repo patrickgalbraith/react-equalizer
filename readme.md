@@ -35,7 +35,7 @@ With advanced options:
 
 ### Roadmap
 
-* Add support for setting height based on height of children
+* Add support for setting height of component based on total height of children
 
 ### References
 * Zurb Foundation Equalizer
