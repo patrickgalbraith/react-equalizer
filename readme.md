@@ -1,3 +1,5 @@
+![Build Status](https://api.travis-ci.org/patrickgalbraith/react-equalizer.svg)
+
 # React Equalizer
 
 Pure React component which equalizes heights of child components.
