@@ -10,6 +10,15 @@ Pure React component which equalizes heights of child components.
 npm install --save react-equalizer
 ```
 
+### Running Tests
+
+Grab the latest source and in the project directory run:
+
+```
+npm install
+npm test
+```
+
 ### Usage
 
 ```jsx
