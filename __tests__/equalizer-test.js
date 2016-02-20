@@ -6,142 +6,227 @@ const TestUtils = require('react-addons-test-utils');
 
 const Equalizer = require('../src/equalizer').default;
 
-const generateEqualizerMock = (getNodeOffsetTop, getNodeHeight) => {
-  class EqualizerMock extends Equalizer {
-    getNodeOffsetTop(...args) {
-      return getNodeOffsetTop(...args)
-    }
-
-    getNodeHeight(...args) {
-      return getNodeHeight(...args)
-    }
-  }
-
-  return EqualizerMock
-}
+const getMaxHeight = (heights) => heights[heights.length-1]
 
 describe('Equalizer', () => {
+  let inlineNodes, stackedNodes;
 
-  it('sets children heights to the tallest child', (done) => {
-    var baseHeight = '100px';
-
-    var EqualizerMock = generateEqualizerMock(
-      (node) => {
-        return 0
+  beforeEach(function() {
+    inlineNodes = [
+      {
+        offsetTop: 0,
+        offsetHeight: 50,
+        style: {}
       },
-      (node) => {
-        if(node.previousElementSibling) {
-          return (+baseHeight) - 10
-        } else {
-          return +baseHeight
-        }
+      {
+        offsetTop: 0,
+        offsetHeight: 150,
+        style: {}
+      },
+      {
+        offsetTop: 0,
+        offsetHeight: 100,
+        style: {}
       }
-    )
+    ]
 
-    var element = TestUtils.renderIntoDocument(
-      <EqualizerMock>
-        <div></div>
-        <div></div>
-        <div></div>
-      </EqualizerMock>
-    );
-
-    jest.runAllTimers();
-
-    var el = ReactDOM.findDOMNode(element);
-
-    for (var i=0; i < el.children.length; i++) {
-      var childNode = el.children[i];
-      expect(childNode.style.height).toEqual(baseHeight);
-    }
+    stackedNodes = [
+      {
+        offsetTop: 0,
+        offsetHeight: 50,
+        style: {}
+      },
+      {
+        offsetTop: 0,
+        offsetHeight: 100,
+        style: {}
+      },
+      {
+        offsetTop: 200,
+        offsetHeight: 125,
+        style: {}
+      },
+      {
+        offsetTop: 200,
+        offsetHeight: 50,
+        style: {}
+      }
+    ]
   })
 
-  it('sets children heights to the tallest child in the same row', (done) => {
-    var baseHeight = '100px';
+  describe('.getHeights', function() {
+    it('resets height for all nodes for recalculation', () => {
+      let result = Equalizer.getHeights(inlineNodes)
 
-    var EqualizerMock = generateEqualizerMock(
-      (node) => {
-        return +node.getAttribute('data-row')
-      },
-      (node) => {
-        var prevRow = node.previousElementSibling ? +node.previousElementSibling.getAttribute('data-row') : 0
-        var curRow  = +node.getAttribute('data-row')
+      result.forEach((row) => {
+        row.forEach((item) => {
+          if(Array.isArray(item)) {
+            expect(item[0].style.height).toEqual('auto')
+            expect(item[0].style.maxHeight).toEqual('')
+            expect(item[0].style.minHeight).toEqual('')
+          }
+        })
+      })
+    })
 
-        if(prevRow === curRow) {
-          return (+baseHeight) - 10
-        } else {
-          return +baseHeight
-        }
-      }
-    )
+    it('calculates max height for inline nodes', () => {
+      // byRow = true
+      let result = Equalizer.getHeights(inlineNodes, true)
+      expect(result.length).toEqual(1)
+      expect(result[0].length).toEqual(4)
+      expect(getMaxHeight(result[0])).toEqual(150)
+    })
 
-    var element = TestUtils.renderIntoDocument(
-      <EqualizerMock>
-        <div data-row={1}></div>
-        <div data-row={1}></div>
-        <div data-row={1}></div>
-        <div data-row={2}></div>
-        <div data-row={2}></div>
-        <div data-row={2}></div>
-      </EqualizerMock>
-    );
+    it('calculates max height for inline nodes when byrow is disabled', () => {
+      // byRow = false
+      let result = Equalizer.getHeights(inlineNodes, false)
+      expect(result.length).toEqual(1)
+      expect(result[0].length).toEqual(4)
+      expect(getMaxHeight(result[0])).toEqual(150)
+    })
 
-    jest.runAllTimers();
+    it('calculates max height for stacked nodes', () => {
+      // byRow = true
+      let result = Equalizer.getHeights(stackedNodes, true)
 
-    setTimeout(() => {
-      var el = ReactDOM.findDOMNode(element);
+      expect(result.length).toEqual(2)
 
-      for (var i=0; i < el.children.length; i++) {
-        var childNode = el.children[i];
-        expect(childNode.style.height).toEqual(baseHeight);
-      }
+      // Row 1
+      expect(result[0].length).toEqual(3)
+      expect(getMaxHeight(result[0])).toEqual(100)
 
-      done()
-    }, 2)
+      // Row 2
+      expect(result[1].length).toEqual(3)
+      expect(getMaxHeight(result[1])).toEqual(125)
+    })
+
+    it('calculates max height for stacked nodes when byrow is disabled', () => {
+      // byRow = false
+      let result = Equalizer.getHeights(stackedNodes, false)
+
+      expect(result.length).toEqual(1)
+      expect(result[0].length).toEqual(5)
+      expect(getMaxHeight(result[0])).toEqual(125)
+    })
   })
 
-  it('sets children heights to the tallest child in any row when byrow is disabled', (done) => {
-    var maxHeight  = '102px';
-    var baseHeight = '100px';
+  describe('component', function() {
+    it('sets children heights to the tallest child', (done) => {
+      spyOn(Equalizer, 'getHeights').andCallFake(() => {
+        return [[
+          [el.children[0], 0],
+          [el.children[1], 150],
+          [el.children[2], 0],
+          150
+        ]]
+      })
 
-    var EqualizerMock = generateEqualizerMock(
-      (node) => {
-        return +node.getAttribute('data-row')
-      },
-      (node) => {
-        var prevRow = node.previousElementSibling ? +node.previousElementSibling.getAttribute('data-row') : 0
-        var curRow  = +node.getAttribute('data-row')
+      let component = TestUtils.renderIntoDocument(
+        <Equalizer>
+          <div></div>
+          <div></div>
+          <div></div>
+        </Equalizer>
+      )
 
-        if(prevRow === curRow) {
-          return (+baseHeight) - 10
-        } else {
-          return (+baseHeight) + curRow
-        }
-      }
-    )
+      let el = ReactDOM.findDOMNode(component)
 
-    var element = TestUtils.renderIntoDocument(
-      <EqualizerMock>
-        <div data-row={1}></div>
-        <div data-row={1}></div>
-        <div data-row={1}></div>
-        <div data-row={2}></div>
-        <div data-row={2}></div>
-        <div data-row={2}></div>
-      </EqualizerMock>
-    );
+      jest.runAllTimers()
 
-    jest.runAllTimers();
-
-    setTimeout(() => {
-      var el = ReactDOM.findDOMNode(element);
+      expect(Equalizer.getHeights).toHaveBeenCalled()
 
       for (var i=0; i < el.children.length; i++) {
-        var childNode = el.children[i];
-        expect(childNode.style.height).toEqual(maxHeight);
+        var childNode = el.children[i]
+        expect(childNode.style.height).toEqual('150px')
       }
+    })
 
-      done()
-    }, 2)
+    it('sets children heights to the tallest child in the same row', (done) => {
+      spyOn(Equalizer, 'getHeights').andCallFake(() => {
+        return [
+          [
+            [el.children[0], 75],
+            [el.children[1], 100],
+            100
+          ],
+          [
+            [el.children[2], 50],
+            [el.children[3], 125],
+            125
+          ]
+        ]
+      })
+
+      let component = TestUtils.renderIntoDocument(
+        <Equalizer>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </Equalizer>
+      )
+
+      let el = ReactDOM.findDOMNode(component)
+
+      jest.runAllTimers()
+
+      expect(Equalizer.getHeights).toHaveBeenCalled()
+
+      for (var i=0; i < el.children.length; i++) {
+        var childNode = el.children[i]
+
+        if(i < 2) {
+          expect(childNode.style.height).toEqual('100px')
+        } else {
+          expect(childNode.style.height).toEqual('125px')
+        }
+      }
+    })
+
+    it('sets children minheights to the tallest child through custom property', (done) => {
+      spyOn(Equalizer, 'getHeights').andCallFake(() => {
+        return [[
+          [el.children[0], 0],
+          [el.children[1], 150],
+          [el.children[2], 0],
+          150
+        ]]
+      })
+
+      let component = TestUtils.renderIntoDocument(
+        <Equalizer property='minHeight'>
+          <div></div>
+          <div></div>
+          <div></div>
+        </Equalizer>
+      )
+
+      let el = ReactDOM.findDOMNode(component)
+
+      jest.runAllTimers()
+
+      expect(Equalizer.getHeights).toHaveBeenCalled()
+
+      for (var i=0; i < el.children.length; i++) {
+        var childNode = el.children[i]
+        expect(childNode.style.minHeight).toEqual('150px')
+      }
+    })
+
+    it('can be disabled', (done) => {
+      spyOn(Equalizer, 'getHeights')
+
+      let component = TestUtils.renderIntoDocument(
+        <Equalizer enabled={() => false}>
+          <div></div>
+        </Equalizer>
+      )
+
+      let el = ReactDOM.findDOMNode(component)
+
+      jest.runAllTimers()
+
+      expect(Equalizer.getHeights).not.toHaveBeenCalled()
+    })
   })
 })

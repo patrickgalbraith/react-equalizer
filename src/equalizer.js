@@ -4,17 +4,17 @@ import ReactDOM from 'react-dom'
 export default class Equalizer extends Component {
   constructor(){
     super()
-    this.handleResize = this.handleResize.bind(this)
+    this.handleResize          = this.handleResize.bind(this)
     this.updateChildrenHeights = this.updateChildrenHeights.bind(this)
   }
 
   componentDidMount() {
     this.handleResize()
-    window.addEventListener('resize', this.handleResize)
+    addEventListener('resize', this.handleResize)
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize)
+    removeEventListener('resize', this.handleResize)
   }
 
   componentDidUpdate() {
@@ -22,7 +22,7 @@ export default class Equalizer extends Component {
   }
 
   handleResize() {
-    window.setTimeout(this.updateChildrenHeights, 0)
+    setTimeout(this.updateChildrenHeights, 0)
   }
 
   static getHeights(nodes, byRow = true) {
@@ -33,7 +33,11 @@ export default class Equalizer extends Component {
     groups[row] = []
 
     for(let i = 0; i < nodes.length; i++){
-      nodes[i].style.height = 'auto'
+      let node = nodes[i]
+
+      node.style.height    = 'auto'
+      node.style.maxHeight = ''
+      node.style.minHeight = ''
 
       const elOffsetTop = node.offsetTop
       const elHeight    = node.offsetHeight
@@ -48,7 +52,7 @@ export default class Equalizer extends Component {
         lastElTopOffset = elOffsetTop
       }
 
-      groups[row].push([nodes[i], elHeight])
+      groups[row].push([node, elHeight])
     }
 
     for (let j = 0; j < groups.length; j++) {
