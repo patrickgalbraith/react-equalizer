@@ -33,6 +33,10 @@ With advanced options:
 </Equalizer>
 ```
 
+### Roadmap
+
+* Add support for setting height based on height of children
+
 ### References
 * Zurb Foundation Equalizer
 * jQuery Match Height
