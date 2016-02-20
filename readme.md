@@ -4,6 +4,12 @@
 
 Pure React component which equalizes heights of child components.
 
+### Installation
+
+```
+npm install --save react-equalizer
+```
+
 ### Usage
 
 ```jsx
