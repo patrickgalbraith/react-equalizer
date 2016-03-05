@@ -122,6 +122,10 @@ class MyComponent extends Component {
 }
 ```
 
+### Demo
+
+http://jsbin.com/vaheha/edit?js,output
+
 ## Running Tests
 
 Grab the latest source and in the project directory run:
