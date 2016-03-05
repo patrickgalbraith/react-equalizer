@@ -87,7 +87,7 @@ This is a basic example which equalizes height of child components.
 <Equalizer
   byRow={false}
   property="maxHeight"
-  enabled={(node) => window.matchMedia("(min-width: 400px)").matches}>
+  enabled={() => window.matchMedia("(min-width: 400px)").matches}>
   <div>Child 1</div>
   <div>Child 2</div>
   <div>Child 3</div>
