@@ -29,7 +29,7 @@ This is a basic example which equalizes height of child components.
 | `property` | `height`                             | The style property used when setting height. Usually `height`, `maxHeight` or `minHeight`.                                                                                                                   |
 | `byRow`    | `true`                               | By default Equalizer will attempt to take into account stacking by matching rows by their window offset.                                                                                                     |
 | `enabled`  | `(component, node) => true`          | Takes a function that returns `true` or `false` and can be used to disable Equalizer. Useful if you want to disable Equalizer when something changes such as window width or height based on a media query.. |
-| `nodes`    | `(component, node) => {`<br>`  return node.children`<br>`}` | Function which returns nodes to equalize. By default Equalizer only measures the heights of its direct descendants.                                                                                          |
+| `nodes`    | `(component, node) => node.children` | Function which returns nodes to equalize. By default Equalizer only measures the heights of its direct descendants.                                                                                          |
 
 ### Simple example with options
 
