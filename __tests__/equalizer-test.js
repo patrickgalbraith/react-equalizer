@@ -279,26 +279,3 @@ describe('Equalizer', () => {
     })
   })
 })
-
-
-class MyComponent extends Component {
-  getNodes() {
-    return = [
-      this.refs.node1,
-      this.refs.node2,
-      this.refs.node3
-    ]
-  }
-
-  render() {
-    return(
-      <Equalizer nodes={this.getNodes.bind(this)}>
-        <div ref="node1"></div>
-        <div>
-          <div ref="node2"></div>
-        </div>
-        <div ref="node3"></div>
-      </Equalizer>
-    )
-  }
-}
