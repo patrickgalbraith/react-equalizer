@@ -71,9 +71,8 @@ This is a basic example which equalizes height of child components.
         <code>nodes</code>
       </td>
       <td>
-        <pre><code>(component, node) =&gt; {
-  return node.children
-}</code></pre>
+        <pre><code>(component, node) =&gt;
+  return node.children</code></pre>
       </td>
       <td>
         Function which returns nodes to equalize. By default Equalizer only measures the heights of its direct descendants.
