@@ -24,12 +24,63 @@ This is a basic example which equalizes height of child components.
 
 ### Options
 
-| Prop       | Default                              | Description                                                                                                                                                                                                  |
-|------------|--------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `property` | `height`                             | The style property used when setting height. Usually `height`, `maxHeight` or `minHeight`.                                                                                                                   |
-| `byRow`    | `true`                               | By default Equalizer will attempt to take into account stacking by matching rows by their window offset.                                                                                                     |
-| `enabled`  | `(component, node) => true`          | Takes a function that returns `true` or `false` and can be used to disable Equalizer. Useful if you want to disable Equalizer when something changes such as window width or height based on a media query.. |
-| `nodes`    | `(component, node) => node.children` | Function which returns nodes to equalize. By default Equalizer only measures the heights of its direct descendants.                                                                                          |
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th width="30%">Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>property</code>
+      </td>
+      <td>
+        <code>height</code>
+      </td>
+      <td>
+        The style property used when setting height. Usually <code>height</code>, <code>maxHeight</code> or <code>minHeight</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>byRow</code>
+      </td>
+      <td>
+        <code>true</code>
+      </td>
+      <td>
+        By default Equalizer will attempt to take into account stacking by matching rows by their window offset.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>enabled</code>
+      </td>
+      <td>
+        <code>(component, node) =&gt; true</code>
+      </td>
+      <td>
+        Takes a function that returns <code>true</code> or <code>false</code> and can be used to disable Equalizer. Useful if you want to disable Equalizer when something changes such as window width or height based on a media query..
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>nodes</code>
+      </td>
+      <td>
+        <pre><code>(component, node) =&gt; {
+  return node.children
+}</code></pre>
+      </td>
+      <td>
+        Function which returns nodes to equalize. By default Equalizer only measures the heights of its direct descendants.
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ### Simple example with options
 
