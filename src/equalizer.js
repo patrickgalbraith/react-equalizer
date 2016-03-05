@@ -69,7 +69,7 @@ export default class Equalizer extends Component {
     const { property, byRow, enabled } = this.props
     const node = ReactDOM.findDOMNode(this)
 
-    if (!enabled(node)) {
+    if (!enabled(this, node)) {
       return
     }
 
