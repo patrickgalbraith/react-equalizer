@@ -213,6 +213,55 @@ describe('Equalizer', () => {
       }
     })
 
+    it('allows setting specific nodes to the tallest node by ref', (done) => {
+      let allNodes = null
+
+      const TestComponent = React.createClass({
+        getNodes() {
+          allNodes = [
+            this.refs.node1,
+            this.refs.node2,
+            this.refs.node3,
+            this.refs.node4
+          ]
+          return allNodes
+        },
+
+        render() {
+          return(
+            <Equalizer nodes={this.getNodes}>
+              <div ref="node1"></div>
+              <div ref="node2">
+                <div ref="node3"></div>
+              </div>
+              <div ref="node4"></div>
+            </Equalizer>
+          )
+        }
+      })
+
+      spyOn(Equalizer, 'getHeights').andCallFake(() => {
+        return [[
+          [ReactDOM.findDOMNode(allNodes[0]), 0],
+          [ReactDOM.findDOMNode(allNodes[2]), 150],
+          [ReactDOM.findDOMNode(allNodes[3]), 0],
+          150
+        ]]
+      })
+
+      let component = TestUtils.renderIntoDocument(<TestComponent />)
+      let el        = ReactDOM.findDOMNode(component)
+
+      jest.runAllTimers()
+
+      expect(Equalizer.getHeights).toHaveBeenCalled()
+
+      expect(ReactDOM.findDOMNode(allNodes[0]).style.height).toEqual('150px')
+      expect(ReactDOM.findDOMNode(allNodes[1]).style.height).not.toEqual('150px')
+      expect(ReactDOM.findDOMNode(allNodes[2]).style.height).toEqual('150px')
+      expect(ReactDOM.findDOMNode(allNodes[3]).style.height).toEqual('150px')
+    })
+
     it('can be disabled', (done) => {
       spyOn(Equalizer, 'getHeights')
 
@@ -230,3 +279,26 @@ describe('Equalizer', () => {
     })
   })
 })
+
+
+class MyComponent extends Component {
+  getNodes() {
+    return = [
+      this.refs.node1,
+      this.refs.node2,
+      this.refs.node3
+    ]
+  }
+
+  render() {
+    return(
+      <Equalizer nodes={this.getNodes.bind(this)}>
+        <div ref="node1"></div>
+        <div>
+          <div ref="node2"></div>
+        </div>
+        <div ref="node3"></div>
+      </Equalizer>
+    )
+  }
+}

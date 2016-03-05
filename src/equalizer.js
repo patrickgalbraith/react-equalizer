@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
+import debounce from 'lodash.debounce'
 
 export default class Equalizer extends Component {
   constructor(){
     super()
-    this.handleResize          = this.handleResize.bind(this)
+    this.handleResize          = debounce(this.handleResize.bind(this), 50)
     this.updateChildrenHeights = this.updateChildrenHeights.bind(this)
   }
 
@@ -72,8 +73,9 @@ export default class Equalizer extends Component {
       return
     }
 
-    if (node !== undefined && node.children) {
-      const heights = this.constructor.getHeights(node.children, byRow)
+    if (node !== undefined) {
+      const children = this.props.nodes(this, node)
+      const heights  = this.constructor.getHeights(children, byRow)
 
       for (let row = 0; row < heights.length; row++) {
         const max = heights[row][heights[row].length-1]
@@ -97,12 +99,14 @@ export default class Equalizer extends Component {
 Equalizer.defaultProps = {
   property: 'height',
   byRow:    true,
-  enabled:  () => true
+  enabled:  () => true,
+  nodes:    (component, node) => node.children
 }
 
 Equalizer.propTypes = {
   children: React.PropTypes.node.isRequired,
   property: React.PropTypes.string,
   byRow:    React.PropTypes.bool,
-  enabled:  React.PropTypes.func
+  enabled:  React.PropTypes.func,
+  nodes:    React.PropTypes.func
 }
