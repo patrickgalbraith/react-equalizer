@@ -89,7 +89,7 @@ export default class Equalizer extends Component {
 
   render() {
     return (
-      <div>
+      <div {...this.props}>
         {this.props.children}
       </div>
     )
