@@ -35,17 +35,6 @@ This is a basic example which equalizes height of child components.
   <tbody>
     <tr>
       <td>
-        <code>className</code>
-      </td>
-      <td>
-        <code>[empty]</code>
-      </td>
-      <td>
-        Class of the equalizer container
-      </td>
-    </tr>
-    <tr>
-      <td>
         <code>property</code>
       </td>
       <td>
