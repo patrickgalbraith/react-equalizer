@@ -90,7 +90,7 @@ export default class Equalizer extends Component {
   render() {
     const {children, property, byRow, enabled, nodes, ...otherProps} = this.props
     return (
-      <div {...otherProps}>
+      <div onLoad={this.handleResize} {...otherProps}>
         {children}
       </div>
     )
