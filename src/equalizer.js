@@ -1,6 +1,25 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import debounce from 'lodash.debounce'
+
+// http://stackoverflow.com/a/24004942
+function debounce(func, wait, immediate) {
+  let timeout
+  return function() {
+    let context = this
+    let args = arguments
+    let callNow = immediate && !timeout
+    clearTimeout(timeout)
+    timeout = setTimeout(function() {
+      timeout = null
+      if (!immediate) {
+        func.apply(context, args);
+      }
+    }, wait)
+    if (callNow) {
+      func.apply(context, args)
+    }
+  }
+}
 
 export default class Equalizer extends Component {
   constructor(){
@@ -40,8 +59,8 @@ export default class Equalizer extends Component {
       node.style.maxHeight = ''
       node.style.minHeight = ''
 
-      const elOffsetTop = node.offsetTop
-      const elHeight    = node.offsetHeight
+      // http://ejohn.org/blog/getboundingclientrect-is-awesome/
+      const {top: elOffsetTop, height: elHeight} = node.getBoundingClientRect();
 
       if(i === 0) {
         lastElTopOffset = elOffsetTop
@@ -105,9 +124,9 @@ Equalizer.defaultProps = {
 }
 
 Equalizer.propTypes = {
-  children: React.PropTypes.node.isRequired,
-  property: React.PropTypes.string,
-  byRow:    React.PropTypes.bool,
-  enabled:  React.PropTypes.func,
-  nodes:    React.PropTypes.func
+  children: PropTypes.node.isRequired,
+  property: PropTypes.string,
+  byRow:    PropTypes.bool,
+  enabled:  PropTypes.func,
+  nodes:    PropTypes.func
 }
