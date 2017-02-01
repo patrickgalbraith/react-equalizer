@@ -8,47 +8,67 @@ const Equalizer = require('../src/equalizer').default;
 
 const getMaxHeight = (heights) => heights[heights.length-1]
 
+const mockFactory = function(values) {
+  return function(){
+    return values
+  }
+}
+
 describe('Equalizer', () => {
   let inlineNodes, stackedNodes;
 
   beforeEach(function() {
     inlineNodes = [
       {
-        offsetTop: 0,
-        offsetHeight: 50,
+        getBoundingClientRect: mockFactory({
+          top: 0,
+          height: 50
+        }),
         style: {}
       },
       {
-        offsetTop: 0,
-        offsetHeight: 150,
+        getBoundingClientRect: mockFactory({
+          top: 0,
+          height: 150
+        }),
         style: {}
       },
       {
-        offsetTop: 0,
-        offsetHeight: 100,
+        getBoundingClientRect: mockFactory({
+          top: 0,
+          height: 100
+        }),
         style: {}
       }
     ]
 
     stackedNodes = [
       {
-        offsetTop: 0,
-        offsetHeight: 50,
+        getBoundingClientRect: mockFactory({
+          top: 0,
+          height: 50
+        }),
         style: {}
       },
       {
-        offsetTop: 0,
-        offsetHeight: 100,
+        getBoundingClientRect: mockFactory({
+          top: 0,
+          height: 100
+        }),
         style: {}
       },
       {
-        offsetTop: 200,
-        offsetHeight: 125,
+        getBoundingClientRect: mockFactory({
+          top: 200,
+          height: 125
+        }),
         style: {}
       },
       {
-        offsetTop: 200,
-        offsetHeight: 50,
+        getBoundingClientRect: mockFactory({
+          top: 200,
+          height: 50
+        }),
         style: {}
       }
     ]
