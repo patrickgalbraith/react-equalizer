@@ -33,6 +33,7 @@
     ]
   },
   "dependencies": {
+    "lodash.debounce": "^4.0.3"
   },
   "peerDependencies": {
     "react": ">0.14.0",
