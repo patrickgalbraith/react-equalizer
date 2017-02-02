@@ -14,41 +14,55 @@ describe('Equalizer', () => {
   beforeEach(function() {
     inlineNodes = [
       {
-        offsetTop: 0,
-        offsetHeight: 50,
+        getBoundingClientRect: () => ({
+          top: 0,
+          height: 50
+        }),
         style: {}
       },
       {
-        offsetTop: 0,
-        offsetHeight: 150,
+        getBoundingClientRect: () => ({
+          top: 0,
+          height: 150
+        }),
         style: {}
       },
       {
-        offsetTop: 0,
-        offsetHeight: 100,
+        getBoundingClientRect: () => ({
+          top: 0,
+          height: 100
+        }),
         style: {}
       }
     ]
 
     stackedNodes = [
       {
-        offsetTop: 0,
-        offsetHeight: 50,
+        getBoundingClientRect: () => ({
+          top: 0,
+          height: 50
+        }),
         style: {}
       },
       {
-        offsetTop: 0,
-        offsetHeight: 100,
+        getBoundingClientRect: () => ({
+          top: 0,
+          height: 100
+        }),
         style: {}
       },
       {
-        offsetTop: 200,
-        offsetHeight: 125,
+        getBoundingClientRect: () => ({
+          top: 200,
+          height: 125
+        }),
         style: {}
       },
       {
-        offsetTop: 200,
-        offsetHeight: 50,
+        getBoundingClientRect: () => ({
+          top: 200,
+          height: 50
+        }),
         style: {}
       }
     ]
