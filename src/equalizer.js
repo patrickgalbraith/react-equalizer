@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react'
-import ReactDOM from 'react-dom'
 import debounce from 'lodash.debounce'
 
 export default class Equalizer extends Component {
-  constructor(){
+  constructor() {
     super()
     this.handleResize          = debounce(this.handleResize.bind(this), 50)
     this.updateChildrenHeights = this.updateChildrenHeights.bind(this)
@@ -15,6 +14,7 @@ export default class Equalizer extends Component {
   }
 
   componentWillUnmount() {
+    this.rootNode = null
     this.handleResize.cancel()
     removeEventListener('resize', this.handleResize)
   }
@@ -42,7 +42,7 @@ export default class Equalizer extends Component {
       node.style.minHeight = ''
 
       // http://ejohn.org/blog/getboundingclientrect-is-awesome/
-      const {top: elOffsetTop, height: elHeight} = node.getBoundingClientRect();
+      const {top: elOffsetTop, height: elHeight} = node.getBoundingClientRect()
 
       if(i === 0) {
         lastElTopOffset = elOffsetTop
@@ -68,9 +68,9 @@ export default class Equalizer extends Component {
 
   updateChildrenHeights() {
     const { property, byRow, enabled } = this.props
-    const node = ReactDOM.findDOMNode(this)
+    const node = this.rootNode
 
-    if (!enabled(this, node)) {
+    if (!node || !enabled(this, node)) {
       return
     }
 
@@ -91,7 +91,7 @@ export default class Equalizer extends Component {
   render() {
     const {children, property, byRow, enabled, nodes, ...otherProps} = this.props
     return (
-      <div onLoad={this.handleResize} {...otherProps}>
+      <div ref={node => this.rootNode = node} onLoad={this.handleResize} {...otherProps}>
         {children}
       </div>
     )
