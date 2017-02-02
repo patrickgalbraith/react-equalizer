@@ -124,7 +124,7 @@ class MyComponent extends Component {
 
 ### Demo
 
-http://jsbin.com/vaheha/edit?js,output
+http://jsbin.com/ceyumumuye/edit?js,output
 
 ## Running Tests
 
