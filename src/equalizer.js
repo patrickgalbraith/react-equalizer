@@ -15,6 +15,7 @@ export default class Equalizer extends Component {
   }
 
   componentWillUnmount() {
+    this.handleResize.cancel()
     removeEventListener('resize', this.handleResize)
   }
 
