@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import debounce from 'lodash.debounce'
 
 export default class Equalizer extends Component {
   constructor() {
@@ -15,7 +14,7 @@ export default class Equalizer extends Component {
 
   componentWillUnmount() {
     this.rootNode = null
-    this.handleResize.cancel()
+    this.handleResize.clear()
     removeEventListener('resize', this.handleResize)
   }
 
@@ -111,4 +110,47 @@ Equalizer.propTypes = {
   byRow:    PropTypes.bool,
   enabled:  PropTypes.func,
   nodes:    PropTypes.func
+}
+
+// from: https://github.com/component/debounce
+function debounce(func, wait, immediate){
+  var timeout, args, context, timestamp, result
+  if (null == wait) wait = 100
+
+  function later() {
+    var last = Date.now() - timestamp
+
+    if (last < wait && last >= 0) {
+      timeout = setTimeout(later, wait - last)
+    } else {
+      timeout = null
+      if (!immediate) {
+        result = func.apply(context, args)
+        context = args = null
+      }
+    }
+  }
+
+  var debounced = function(){
+    context = this
+    args = arguments
+    timestamp = Date.now()
+    var callNow = immediate && !timeout
+    if (!timeout) timeout = setTimeout(later, wait)
+    if (callNow) {
+      result = func.apply(context, args)
+      context = args = null
+    }
+
+    return result
+  }
+
+  debounced.clear = function() {
+    if (timeout) {
+      clearTimeout(timeout)
+      timeout = null
+    }
+  }
+
+  return debounced
 }
