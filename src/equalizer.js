@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types'
 
 export default class Equalizer extends Component {
   constructor() {
@@ -67,7 +67,7 @@ export default class Equalizer extends Component {
   }
 
   updateChildrenHeights() {
-    const { property, byRow, enabled } = this.props
+    const { property, byRow, enabled, nodeWillCompute, nodeWillUpdate } = this.props
     const node = this.rootNode
 
     if (!node || !enabled(this, node)) {
@@ -75,14 +75,17 @@ export default class Equalizer extends Component {
     }
 
     if (node !== undefined) {
-      const children = this.props.nodes(this, node)
-      const heights  = this.constructor.getHeights(children, byRow)
+      const children          = this.props.nodes(this, node)
+      const childrenToCompute = Array.from(children).filter(nodeWillCompute)
+      const heights           = this.constructor.getHeights(childrenToCompute, byRow)
 
       for (let row = 0; row < heights.length; row++) {
         const max = heights[row][heights[row].length-1]
 
         for (let i = 0; i < (heights[row].length - 1); i++) {
-          heights[row][i][0].style[property] = max + 'px'
+          if (nodeWillUpdate(heights[row][i][0], heights[row][i][1])) {
+            heights[row][i][0].style[property] = max + 'px'
+          }
         }
       }
     }
@@ -99,10 +102,12 @@ export default class Equalizer extends Component {
 }
 
 Equalizer.defaultProps = {
-  property: 'height',
-  byRow:    true,
-  enabled:  () => true,
-  nodes:    (component, node) => node.children
+  property:        'height',
+  byRow:           true,
+  enabled:         () => true,
+  nodeWillCompute: () => true,
+  nodeWillUpdate:  () => true,
+  nodes:           (component, node) => node.children
 }
 
 Equalizer.propTypes = {
