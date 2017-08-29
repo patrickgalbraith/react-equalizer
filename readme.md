@@ -101,7 +101,7 @@ This can be useful if you want to equalize components other than direct descenda
 ```jsx
 class MyComponent extends Component {
   getNodes(equalizerComponent, equalizerElement) {
-    return = [
+    return [
       this.refs.node1,
       this.refs.node2,
       this.refs.node3
@@ -110,12 +110,12 @@ class MyComponent extends Component {
 
   render() {
     return(
-      <Equalizer nodes={this.getNodes.bind(this)}>
-        <div ref="node1"></div>
+      <Equalizer nodes={() => this.getNodes()}>
+        <div ref={n => this.node1 = n}></div>
         <div>
-          <div ref="node2"></div>
+          <div ref={n => this.node2 = n}></div>
         </div>
-        <div ref="node3"></div>
+        <div ref={n => this.node3 = n}></div>
       </Equalizer>
     )
   }
